@@ -1,5 +1,4 @@
 // script.js
-
 document.addEventListener('DOMContentLoaded', () => {
   const container      = document.getElementById('image-slider-container');
   const loading        = document.getElementById('loading-message');
@@ -7,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const prevBtn        = document.getElementById('prev-btn');
   const playPauseBtn   = document.getElementById('play-pause-btn');
   const nextBtn        = document.getElementById('next-btn');
+  const audioEl        = document.getElementById('audio-player');
   let   imgs           = [];
   let   current        = 0;
   let   timer          = null;
@@ -58,8 +58,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (list.length === 0) {
-      return showError(`Keine Bilder in "${folderId}" gefunden.`);
+      return showError(`Keine Medien in "${folderId}" gefunden.`);
     }
+
+    // ◆ Trenne WAVs von Bildern
+    const audioFiles = list.filter(f => f.toLowerCase().endsWith('.wav'));
+    if (audioFiles.length) {
+      audioEl.src = `images/${folderId}/${encodeURIComponent(audioFiles[0])}`;
+      audioEl.style.display = 'block';
+    }
+    list = list.filter(f => !f.toLowerCase().endsWith('.wav'));
 
     if (timer) clearInterval(timer);
     container.querySelectorAll('img').forEach(x => x.remove());
@@ -81,7 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
     startAutoPlay();
   }
 
-  // Event-Listener für Controls
   prevBtn.addEventListener('click',  () => {
     if (isPlaying) stopAutoPlay();
     showPrevImage();
@@ -94,7 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
     isPlaying ? stopAutoPlay() : startAutoPlay();
   });
 
-  // URL-Parameter auslesen
   const params   = new URLSearchParams(window.location.search);
   const folderId = params.get('folderId');
   if (!folderId) {
