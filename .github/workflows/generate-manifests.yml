@@ -8,11 +8,17 @@ on:
       - 'images/**'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          persist-credentials: true
       - name: Show workspace structure
         run: ls -R .
       - name: Setup Node.js
