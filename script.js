@@ -8,9 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let   timer     = null;
 
   function showError(msg) {
-    loading.style.display = 'none';
-    errorMsg.textContent  = msg;
-    errorMsg.style.display = 'block';
+    loading.style.display   = 'none';
+    errorMsg.textContent    = msg;
+    errorMsg.style.display  = 'block';
     console.error(msg);
   }
 
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const manifestPath = `images/${folderId}/manifest.json`;
     let list;
     try {
-      const res = await fetch(manifestPath);
+      const res  = await fetch(manifestPath);
       if (!res.ok) throw new Error(`Manifest nicht gefunden (${res.status})`);
       const json = await res.json();
       list = Array.isArray(json.images) ? json.images : [];
@@ -30,14 +30,12 @@ document.addEventListener('DOMContentLoaded', () => {
       return showError(`Keine Bilder in "${folderId}" gefunden.`);
     }
 
-    // Aufräumen, falls schon mal gelaufen
     if (timer) clearInterval(timer);
     container.querySelectorAll('img').forEach(x => x.remove());
     imgs = [];
-    loading.style.display = 'none';
+    loading.style.display  = 'none';
     errorMsg.style.display = 'none';
 
-    // <img>-Tags erstellen
     list.forEach(file => {
       const img = document.createElement('img');
       img.src = `images/${folderId}/${encodeURIComponent(file)}`;
@@ -46,7 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
       imgs.push(img);
     });
 
-    // erstes Bild anzeigen
     imgs[0].classList.add('active');
     current = 0;
 
@@ -59,7 +56,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // URL prüfen
   const params   = new URLSearchParams(window.location.search);
   const folderId = params.get('folderId');
   if (!folderId) {
