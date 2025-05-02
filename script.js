@@ -1,75 +1,70 @@
+// script.js
 document.addEventListener('DOMContentLoaded', () => {
-  const sliderContainer = document.getElementById('image-slider-container');
-  const loadingMessage = document.getElementById('loading-message');
-  const errorMessage   = document.getElementById('error-message');
-  let  currentImageIndex = 0;
-  let  imageElements = [];
-  let  intervalId    = null;
+  const container = document.getElementById('image-slider-container');
+  const loading   = document.getElementById('loading-message');
+  const errorMsg  = document.getElementById('error-message');
+  let   imgs      = [];
+  let   current   = 0;
+  let   timer     = null;
 
-  function displayError(msg) {
-    loadingMessage.style.display = 'none';
-    errorMessage.textContent = msg;
-    errorMessage.style.display = 'block';
+  function showError(msg) {
+    loading.style.display = 'none';
+    errorMsg.textContent  = msg;
+    errorMsg.style.display = 'block';
     console.error(msg);
   }
 
   async function startSlider(folderId) {
-    const apiUrl = `https://api.github.com/repos/allgemeinbildung/slider`
-                 + `/contents/images/${folderId}?ref=main`;
+    const manifestPath = `images/${folderId}/manifest.json`;
+    let list;
     try {
-      const res = await fetch(apiUrl);
-      if (!res.ok) throw new Error(`GitHub-API-Error ${res.status}`);
-      const items = await res.json();
-      // Nur Dateien mit Bild-Extensions:
-      const imageUrls = items
-        .filter(item => item.type === 'file'
-                     && /\.(jpe?g|png|gif)$/i.test(item.name))
-        .map(item => `https://raw.githubusercontent.com`
-                    + `/allgemeinbildung/slider/main`
-                    + `/images/${folderId}/${encodeURIComponent(item.name)}`);
+      const res = await fetch(manifestPath);
+      if (!res.ok) throw new Error(`Manifest nicht gefunden (${res.status})`);
+      const json = await res.json();
+      list = Array.isArray(json.images) ? json.images : [];
+    } catch (e) {
+      return showError(`Fehler beim Laden von manifest.json: ${e.message}`);
+    }
 
-      if (imageUrls.length === 0) {
-        displayError(`Keine Bilder im Ordner '${folderId}' gefunden.`);
-        return;
-      }
+    if (list.length === 0) {
+      return showError(`Keine Bilder in "${folderId}" gefunden.`);
+    }
 
-      // Alte Instanz aufräumen
-      if (intervalId) clearInterval(intervalId);
-      sliderContainer.querySelectorAll('img').forEach(n=>n.remove());
-      imageElements = [];
-      loadingMessage.style.display = 'none';
-      errorMessage.style.display   = 'none';
+    // Aufräumen, falls schon mal gelaufen
+    if (timer) clearInterval(timer);
+    container.querySelectorAll('img').forEach(x => x.remove());
+    imgs = [];
+    loading.style.display = 'none';
+    errorMsg.style.display = 'none';
 
-      // <img>-Tags anlegen
-      imageUrls.forEach(url => {
-        const img = document.createElement('img');
-        img.src = url;
-        img.alt = `Bild aus ${folderId}`;
-        sliderContainer.appendChild(img);
-        imageElements.push(img);
-      });
+    // <img>-Tags erstellen
+    list.forEach(file => {
+      const img = document.createElement('img');
+      img.src = `images/${folderId}/${encodeURIComponent(file)}`;
+      img.alt = `Bild aus ${folderId}`;
+      container.appendChild(img);
+      imgs.push(img);
+    });
 
-      // Erstes Bild anzeigen
-      imageElements[0].classList.add('active');
-      currentImageIndex = 0;
-      if (imageElements.length > 1) {
-        intervalId = setInterval(() => {
-          imageElements[currentImageIndex].classList.remove('active');
-          currentImageIndex = (currentImageIndex + 1) % imageElements.length;
-          imageElements[currentImageIndex].classList.add('active');
-        }, 5000);
-      }
-    } catch (err) {
-      displayError(`Fehler beim Laden der Bilder: ${err.message}`);
+    // erstes Bild anzeigen
+    imgs[0].classList.add('active');
+    current = 0;
+
+    if (imgs.length > 1) {
+      timer = setInterval(() => {
+        imgs[current].classList.remove('active');
+        current = (current + 1) % imgs.length;
+        imgs[current].classList.add('active');
+      }, 5000);
     }
   }
 
-  // Hauptlogik
+  // URL prüfen
   const params   = new URLSearchParams(window.location.search);
   const folderId = params.get('folderId');
-  if (folderId) {
-    startSlider(folderId);
+  if (!folderId) {
+    showError("Kein ?folderId=… in der URL. Beispiel: ?folderId=beduerfnisse");
   } else {
-    displayError("Kein 'folderId' in der URL angegeben. Beispiel: ?folderId=beduerfnisse");
+    startSlider(folderId);
   }
 });
