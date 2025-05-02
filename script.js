@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function startAutoPlay() {
     if (imgs.length > 1) {
-      timer     = setInterval(showNextImage, 5000);
+      timer     = setInterval(showNextImage, 15000);
       isPlaying = true;
       playPauseBtn.textContent = 'Pause';
     }
