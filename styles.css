@@ -1,36 +1,36 @@
+/* styles.css */
 body {
-    margin: 0; /* Wichtig für iFrame, damit kein unerwarteter Leerraum entsteht */
-    overflow: hidden; /* Verhindert Scrollbalken im iFrame */
+  margin: 0;
+  overflow: hidden;
 }
 
 #image-slider-container {
-    width: 100vw; /* Nimmt die volle Breite des Viewports (oder iFrames) ein */
-    height: 100vh; /* Nimmt die volle Höhe des Viewports (oder iFrames) ein */
-    position: relative;
-    overflow: hidden; /* Versteckt Bilder, die außerhalb liegen würden */
-    background-color: #f0f0f0; /* Hintergrund, falls Bilder nicht laden */
-    display: flex; /* Zentriert Lade-/Fehlermeldungen */
-    justify-content: center;
-    align-items: center;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background-color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #image-slider-container img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Skaliert Bilder, behält Seitenverhältnis bei, füllt Container */
-    opacity: 0; /* Standardmäßig unsichtbar */
-    transition: opacity 0.8s ease-in-out; /* Sanfter Übergang für Ein-/Ausblenden */
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
 }
 
 #image-slider-container img.active {
-    opacity: 1; /* Macht das aktive Bild sichtbar */
+  opacity: 1;
 }
 
 #loading-message,
 #error-message {
-    font-family: sans-serif;
-    padding: 20px;
+  font-family: sans-serif;
+  padding: 20px;
 }
