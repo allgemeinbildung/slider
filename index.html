@@ -1,17 +1,23 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Image Slider</title>
+  <title>Image & Audio Slider</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="slider-wrapper">
+    <!-- Audio‐Player -->
+    <audio id="audio-player" controls style="display:none; margin-bottom:10px;"></audio>
+
+    <!-- Bild‐Slider -->
     <div id="image-slider-container">
-      <div id="loading-message">Lade Bilder…</div>
+      <div id="loading-message">Lade Medien…</div>
       <div id="error-message" style="display:none; color:red;"></div>
     </div>
+
     <div id="slider-controls">
       <button id="prev-btn">Zurück</button>
       <button id="play-pause-btn">Pause</button>
