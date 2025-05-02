@@ -2,21 +2,25 @@ name: Generate Image Manifests
 
 on:
   push:
+    branches:
+      - main
     paths:
-      - 'images/**'      # Nur auslösen, wenn sich in images/ etwas ändert
+      - 'images/**'
+  workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Install Node
+      - name: Show workspace structure
+        run: ls -R .
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
       - name: Generate manifests
-        run: |
-          npm install
-          node scripts/generate-manifests.js
+        run: node scripts/generate-manifests.js
       - name: Commit manifests
         run: |
           git config user.name "github-actions[bot]"
