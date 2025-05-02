@@ -1,3 +1,4 @@
+// scripts/generate-manifests.js
 const fs   = require('fs');
 const path = require('path');
 
@@ -22,7 +23,4 @@ function makeManifest(folder) {
   console.log(`→ ${path.relative(process.cwd(), folder)}/manifest.json (${files.length} Bilder)`);
 }
 
-// für jeden Unterordner von images/
-walkDirs(imgRoot).forEach(sub => {
-  makeManifest(sub);
-});
+walkDirs(imgRoot).forEach(sub => makeManifest(sub));
