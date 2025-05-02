@@ -1,23 +1,32 @@
 /* styles.css */
 body {
   margin: 0;
-  overflow: hidden;
-}
-
-#image-slider-container {
-  width: 100vw;
-  height: 100vh;
-  position: relative;
-  overflow: hidden;
-  background-color: #f0f0f0;
+  font-family: sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
+  min-height: 100vh;
+  background: #fafafa;
+}
+
+.slider-wrapper {
+  width: 80vw;
+  max-width: 800px;
+}
+
+#image-slider-container {
+  width: 100%;
+  /* für modernes Browsersupport */
+  aspect-ratio: 16 / 9;
+  position: relative;
+  overflow: hidden;
+  background-color: #f0f0f0;
 }
 
 #image-slider-container img {
   position: absolute;
-  top: 0; left: 0;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -29,8 +38,22 @@ body {
   opacity: 1;
 }
 
-#loading-message,
-#error-message {
-  font-family: sans-serif;
-  padding: 20px;
+#slider-controls {
+  text-align: center;
+  margin-top: 10px;
+}
+
+#slider-controls button {
+  padding: 8px 16px;
+  margin: 0 5px;
+  border: none;
+  background: #007bff;
+  color: white;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#slider-controls button:hover {
+  background: #0056b3;
 }
