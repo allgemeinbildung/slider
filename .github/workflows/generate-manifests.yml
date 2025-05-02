@@ -29,7 +29,7 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Generate manifests
+      - name: Generate manifests (now including .wav)
         run: node scripts/generate-manifests.js
 
       - name: Commit manifests
@@ -38,7 +38,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add images/**/manifest.json
           if ! git diff --cached --quiet HEAD; then
-            git commit -m "chore: update image manifests"
+            git commit -m "chore: update media manifests"
             git push
           else
             echo "🚫 No manifest changes to commit"
